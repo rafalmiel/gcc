@@ -60,6 +60,8 @@
 # endif
 #endif
 
+#define ELIDE_CODE
+
 #ifndef ELIDE_CODE
 
 
