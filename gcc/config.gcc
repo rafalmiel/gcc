@@ -781,6 +781,12 @@ case ${target} in
   gnu_ld=yes
   default_use_cxa_atexit=yes
   use_gcc_stdint=wrap
+  tmake_file="${tmake_file} t-slibgcc"
+  case ${enable_threads} in
+    yes)
+      thread_file='posix'
+      ;;
+  esac
   ;;
 *-*-linux* | frv-*-*linux* | *-*-kfreebsd*-gnu | *-*-gnu* | *-*-kopensolaris*-gnu | *-*-uclinuxfdpiceabi)
   extra_options="$extra_options gnu-user.opt"
