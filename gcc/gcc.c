@@ -4988,6 +4988,7 @@ do_spec (const char *spec)
   int value;
 
   value = do_spec_2 (spec, NULL);
+  fprintf(stderr, "do_spec_2 %s : %d\n", spec, value);
 
   /* Force out any unfinished command.
      If -pipe, this forces out the last command if it ended in `|'.  */
@@ -5322,8 +5323,10 @@ do_spec_1 (const char *spec, int inswitch, const char *soft_matched_part)
 	if (argbuf.length () > 0)
 	  {
 	    value = execute ();
-	    if (value)
+	    if (value) {
+          fprintf(stderr, "spec1 execute: %d\n", value);
 	      return value;
+        }
 	  }
 	/* Reinitialize for a new command, and for a new argument.  */
 	clear_args ();
@@ -5421,6 +5424,7 @@ do_spec_1 (const char *spec, int inswitch, const char *soft_matched_part)
 	      strncpy (buf, q, p - q);
 	      buf[p - q] = 0;
 	      error ("%s", _(buf));
+          fprintf(stderr, "efoo\n");
 	      return -1;
 	    }
 	    break;
@@ -5787,8 +5791,10 @@ do_spec_1 (const char *spec, int inswitch, const char *soft_matched_part)
 		fatal_error (input_location,
 			     "spec %qs has invalid %<%%W%c%>", spec, *p);
 	      p = handle_braces (p + 1);
-	      if (p == 0)
-		return -1;
+	      if (p == 0) {
+            fprintf(stderr, "spec has invalid sth\n");
+		    return -1;
+          }
 	      end_going_arg ();
 	      /* If any args were output, mark the last one for deletion
 		 on failure.  */
@@ -5807,8 +5813,10 @@ do_spec_1 (const char *spec, int inswitch, const char *soft_matched_part)
 	    p = handle_braces (p + 1);
 	    if (at_file_supplied)
 	      close_at_file ();
-	    if (p == 0)
+	    if (p == 0) {
+          fprintf(stderr, "spec has invalid sth 2\n");
 	      return -1;
+        }
 	    break;
 
 	  /* %x{OPTION} records OPTION for %X to output.  */
@@ -5861,26 +5869,34 @@ do_spec_1 (const char *spec, int inswitch, const char *soft_matched_part)
 
 	  case '1':
 	    value = do_spec_1 (cc1_spec, 0, NULL);
-	    if (value != 0)
+	    if (value != 0) {
+          fprintf(stderr, "do_spec_1 1 fail: %d\n", value);
 	      return value;
+        }
 	    break;
 
 	  case '2':
 	    value = do_spec_1 (cc1plus_spec, 0, NULL);
-	    if (value != 0)
+	    if (value != 0) {
+          fprintf(stderr, "do_spec_1 2 fail: %d\n", value);
 	      return value;
+        }
 	    break;
 
 	  case 'a':
 	    value = do_spec_1 (asm_spec, 0, NULL);
-	    if (value != 0)
+	    if (value != 0) {
+          fprintf(stderr, "do_spec_1 3 fail: %d\n", value);
 	      return value;
+        }
 	    break;
 
 	  case 'A':
 	    value = do_spec_1 (asm_final_spec, 0, NULL);
-	    if (value != 0)
+	    if (value != 0) {
+          fprintf(stderr, "do_spec_1 4 fail: %d\n", value);
 	      return value;
+        }
 	    break;
 
 	  case 'C':
@@ -5890,27 +5906,35 @@ do_spec_1 (const char *spec, int inswitch, const char *soft_matched_part)
 		   ? input_file_compiler->cpp_spec
 		   : cpp_spec);
 	      value = do_spec_1 (spec, 0, NULL);
-	      if (value != 0)
-		return value;
+	      if (value != 0) {
+            fprintf(stderr, "do_spec_1 5 fail: %d\n", value);
+		    return value;
+          }
 	    }
 	    break;
 
 	  case 'E':
 	    value = do_spec_1 (endfile_spec, 0, NULL);
-	    if (value != 0)
+	    if (value != 0) {
+          fprintf(stderr, "do_spec_1 6 fail: %d\n", value);
 	      return value;
+        }
 	    break;
 
 	  case 'l':
 	    value = do_spec_1 (link_spec, 0, NULL);
-	    if (value != 0)
+	    if (value != 0) {
+          fprintf(stderr, "do_spec_1 7 fail: %d\n", value);
 	      return value;
+        }
 	    break;
 
 	  case 'L':
 	    value = do_spec_1 (lib_spec, 0, NULL);
-	    if (value != 0)
+	    if (value != 0) {
+          fprintf(stderr, "do_spec_1 8 fail: %d\n", value);
 	      return value;
+        }
 	    break;
 
 	  case 'M':
@@ -5923,8 +5947,10 @@ do_spec_1 (const char *spec, int inswitch, const char *soft_matched_part)
 
 	  case 'G':
 	    value = do_spec_1 (libgcc_spec, 0, NULL);
-	    if (value != 0)
+	    if (value != 0) {
+          fprintf(stderr, "do_spec_1 9 fail: %d\n", value);
 	      return value;
+        }
 	    break;
 
 	  case 'R':
@@ -5942,22 +5968,29 @@ do_spec_1 (const char *spec, int inswitch, const char *soft_matched_part)
 
 	  case 'S':
 	    value = do_spec_1 (startfile_spec, 0, NULL);
-	    if (value != 0)
+	    if (value != 0) {
+          fprintf(stderr, "do_spec_1 10 fail: %d\n", value);
 	      return value;
+        }
 	    break;
 
 	    /* Here we define characters other than letters and digits.  */
 
 	  case '{':
+        fprintf(stderr, "handle_braces %s\n", p);
 	    p = handle_braces (p);
-	    if (p == 0)
+	    if (p == 0) {
+          fprintf(stderr, "braces fuckup\n");
 	      return -1;
+        }
 	    break;
 
 	  case ':':
 	    p = handle_spec_function (p, NULL, soft_matched_part);
-	    if (p == 0)
+	    if (p == 0) {
+          fprintf(stderr, ": fuckup\n");
 	      return -1;
+        }
 	    break;
 
 	  case '%':
@@ -6065,8 +6098,10 @@ do_spec_1 (const char *spec, int inswitch, const char *soft_matched_part)
 	      if (sl)
 		{
 		  value = do_spec_1 (name, 0, NULL);
-		  if (value != 0)
+		  if (value != 0) {
+            fprintf(stderr, "do spec 20 %d\n", value);
 		    return value;
+          }
 		}
 
 	      /* Discard the closing paren.  */
@@ -7406,12 +7441,16 @@ driver::main (int argc, char **argv)
   if (!maybe_print_and_exit ())
     return 0;
 
+  fprintf(stderr, "prepare infiles %d\n", seen_error());
   early_exit = prepare_infiles ();
   if (early_exit)
     return get_exit_code ();
 
+  fprintf(stderr, "dp_spec_on_infiles %d\n", seen_error());
   do_spec_on_infiles ();
+  fprintf(stderr, "maybe linker %s %d\n", argv[0], seen_error());
   maybe_run_linker (argv[0]);
+  fprintf(stderr, "final actions %d\n", seen_error());
   final_actions ();
   return get_exit_code ();
 }
@@ -7599,9 +7638,10 @@ driver::set_up_specs () const
 
   specs_file = find_a_file (&startfile_prefixes, "specs", R_OK, true);
   /* Read the specs file unless it is a default one.  */
-  if (specs_file != 0 && strcmp (specs_file, "specs"))
+  if (specs_file != 0 && strcmp (specs_file, "specs")) {
+    fprintf(stderr, "read_specs %s\n", specs_file);
     read_specs (specs_file, true, false);
-  else
+  } else
     init_spec ();
 
 #ifdef ACCEL_COMPILER
@@ -7617,8 +7657,10 @@ driver::set_up_specs () const
   strcpy (specs_file, standard_exec_prefix);
   strcat (specs_file, spec_machine_suffix);
   strcat (specs_file, "specs");
-  if (access (specs_file, R_OK) == 0)
+  if (access (specs_file, R_OK) == 0) {
+    fprintf(stderr, "read_specs 2 %s\n", specs_file);
     read_specs (specs_file, true, false);
+  }
 
   /* Process any configure-time defaults specified for the command line
      options, via OPTION_DEFAULT_SPECS.  */
@@ -8073,9 +8115,11 @@ driver::prepare_infiles ()
   if (n_infiles == added_libraries)
     fatal_error (input_location, "no input files");
 
-  if (seen_error ())
+  if (seen_error ()) {
     /* Early exit needed from main.  */
+    fprintf(stderr, "error in prepare_infiles\n");
     return true;
+  }
 
   /* Make a place to record the compiler output file names
      that correspond to the input files.  */
@@ -8166,6 +8210,7 @@ driver::do_spec_on_infiles () const
 	    {
 	      error ("%s: %s compiler not installed on this system",
 		     gcc_input_filename, &input_file_compiler->spec[1]);
+          fprintf(stderr, "no compiler\n");
 	      this_file_error = 1;
 	    }
 	  else
@@ -8183,8 +8228,10 @@ driver::do_spec_on_infiles () const
 
 	      value = do_spec (input_file_compiler->spec);
 	      infiles[i].compiled = true;
-	      if (value < 0)
-		this_file_error = 1;
+	      if (value < 0) {
+            fprintf(stderr, "do_spec ret: %d\n", value);
+		    this_file_error = 1;
+          }
 	      else if (compare_debug && debug_check_temp_file[0])
 		{
 		  if (verbose_flag)

@@ -242,6 +242,7 @@ open_file (_cpp_file *file)
 
 	  /* Ignore a directory and continue the search.  The file we're
 	     looking for may be elsewhere in the search path.  */
+      printf("HERE 1 %s %d\n", file->path, file->st.st_mode);
 	  errno = ENOENT;
 	}
 
@@ -257,15 +258,18 @@ open_file (_cpp_file *file)
          fails with EACCES.  We want to return ENOENT in that
          case too.  */
       if (stat (file->path, &file->st) == 0
-          && S_ISDIR (file->st.st_mode))
+          && S_ISDIR (file->st.st_mode)) {
+        printf("HERE 2\n");
         errno = ENOENT;
-      else
+      } else
 	/* The call to stat may have reset errno.  */
 	errno = EACCES;
     }
 #endif    
-  else if (errno == ENOTDIR)
+  else if (errno == ENOTDIR) {
+    printf("HERE 3\n");
     errno = ENOENT;
+  }
 
   file->err_no = errno;
 
