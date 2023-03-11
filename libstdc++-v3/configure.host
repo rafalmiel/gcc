@@ -372,4 +372,7 @@ case "${host}" in
     esac
     abi_baseline_subdir_switch=--print-multi-os-directory
     ;;
+  *-*-cykusz*)
+    abi_baseline_pair=x86_64-cykusz
+    ;;
 esac
