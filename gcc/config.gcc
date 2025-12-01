@@ -885,6 +885,18 @@ case ${target} in
   rust_target_objs="${rust_target_objs} fuchsia-rust.o"
   target_has_targetrustm=yes
   ;;
+*-*-cykusz*)
+  gas=yes
+  gnu_ld=yes
+  default_use_cxa_atexit=yes
+  use_gcc_stdint=wrap
+  tmake_file="${tmake_file} t-slibgcc"
+  case ${enable_threads} in
+    "" | yes | posix)
+      thread_file='posix'
+      ;;
+  esac
+  ;;
 *-*-linux* | frv-*-*linux* | *-*-kfreebsd*-gnu | *-*-gnu* | *-*-kopensolaris*-gnu | *-*-uclinuxfdpiceabi)
   extra_options="$extra_options gnu-user.opt"
   gas=yes
@@ -2222,6 +2234,12 @@ x86_64-*-cygwin*)
 	use_gcc_stdint=wrap
 	tm_defines="${tm_defines} TARGET_CYGWIN64=1"
 	;;
+i[34567]86-*-cykusz*)
+    tm_file="${tm_file} i386/unix.h i386/att.h elfos.h glibc-stdint.h i386/i386elf.h cykusz.h"
+    ;;
+x86_64-*-cykusz*)
+    tm_file="${tm_file} i386/unix.h i386/att.h elfos.h glibc-stdint.h i386/i386elf.h i386/x86-64.h cykusz.h"
+    ;;
 i[34567]86-*-mingw* | x86_64-*-mingw*)
 	tm_file="${tm_file} i386/unix.h i386/bsd.h i386/gas.h i386/cygming.h"
 	xm_file=i386/xm-mingw32.h
